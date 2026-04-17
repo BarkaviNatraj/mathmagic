@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MathMagic — Learning Platform for Every Child</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/style.css" />
+</head>
+<body>
+
+<!-- ── ANIMATED BACKGROUND ─────────────────────────────────────── -->
+<div class="bg-bubbles" aria-hidden="true">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<!-- ── HEADER ───────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🧮</span>
+      <span class="logo-text">MathMagic</span>
+    </div>
+    <nav class="nav-pills">
+      <button class="nav-pill active" data-tab="draw">✏️ Draw</button>
+      <button class="nav-pill" data-tab="upload">📷 Upload</button>
+      <button class="nav-pill" data-tab="type">⌨️ Type</button>
+      <button class="nav-pill" data-tab="speak">🎙️ Speak</button>
+    </nav>
+    <div class="player-badge">
+      <span class="avatar">🦄</span>
+      <div class="player-info">
+        <span class="player-name" id="player-name-display">Explorer</span>
+        <span class="player-level" id="player-level-display">Level 1 ⭐</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN LAYOUT ──────────────────────────────────────────────── -->
+<main class="main-grid">
+
+  <!-- LEFT: INPUT PANEL -->
+  <section class="panel input-panel">
+
+    <!-- ── TAB: DRAW ─────────────────────────────────────────── -->
+    <div class="tab-content active" id="tab-draw">
+      <h2 class="panel-title">✏️ Draw Your Number</h2>
+      <p class="panel-subtitle">Write a digit or equation on the canvas below!</p>
+
+      <div class="canvas-wrapper">
+        <canvas id="drawing-canvas" width="500" height="500" role="img" aria-label="Drawing canvas"></canvas>
+        <div class="canvas-hint">Draw here →</div>
+      </div>
+
+      <div class="canvas-controls">
+        <div class="brush-row">
+          <label class="control-label">Brush Size</label>
+          <input type="range" id="brush-size" min="8" max="30" value="16" class="slider" />
+          <span id="brush-preview" class="brush-preview"></span>
+        </div>
+        <div class="color-row">
+          <button class="color-btn active" data-color="#1a1a2e" style="background:#1a1a2e" aria-label="Dark"></button>
+          <button class="color-btn" data-color="#e94560" style="background:#e94560" aria-label="Red"></button>
+          <button class="color-btn" data-color="#0f3460" style="background:#0f3460" aria-label="Blue"></button>
+          <button class="color-btn" data-color="#533483" style="background:#533483" aria-label="Purple"></button>
+        </div>
+      </div>
+
+      <div class="mode-toggle">
+        <label class="toggle-label">
+          <input type="checkbox" id="multi-digit-mode" />
+          <span class="toggle-track"></span>
+          Multi-digit / Equation mode
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="predict-btn">🔮 Recognise</button>
+        <button class="btn btn-ghost" id="clear-btn">🗑️ Clear</button>
+      </div>
+    </div>
+
+    <!-- ── TAB: UPLOAD ────────────────────────────────────────── -->
+    <div class="tab-content" id="tab-upload">
+      <h2 class="panel-title">📷 Upload an Image</h2>
+      <p class="panel-subtitle">Take a photo of your homework or upload a PDF!</p>
+
+      <label class="upload-zone" id="upload-zone" for="file-input">
+        <div class="upload-icon">📂</div>
+        <div class="upload-text">Drag & drop or click to upload</div>
+        <div class="upload-formats">PNG · JPG · PDF · WEBP</div>
+        <input type="file" id="file-input" accept="image/*,.pdf" hidden />
+      </label>
+
+      <img id="upload-preview" class="upload-preview hidden" alt="Preview" />
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="ocr-btn" disabled>🔍 Extract & Solve</button>
+        <button class="btn btn-ghost" id="clear-upload-btn">🗑️ Clear</button>
+      </div>
+    </div>
+
+    <!-- ── TAB: TYPE ──────────────────────────────────────────── -->
+    <div class="tab-content" id="tab-type">
+      <h2 class="panel-title">⌨️ Type an Equation</h2>
+      <p class="panel-subtitle">Type any math problem and I'll solve it for you!</p>
+
+      <div class="equation-input-wrapper">
+        <input type="text" id="equation-input" class="equation-input"
+               placeholder="e.g.  12 + 7 × 3  or  100 ÷ 4"
+               autocomplete="off" spellcheck="false" />
+        <span class="eq-icon">🔢</span>
+      </div>
+
+      <div class="keypad">
+        <div class="keypad-row">
+          <button class="keypad-btn" data-key="7">7</button>
+          <button class="keypad-btn" data-key="8">8</button>
+          <button class="keypad-btn" data-key="9">9</button>
+          <button class="keypad-btn" data-key="÷">÷</button>
+        </div>
+        <div class="keypad-row">
+          <button class="keypad-btn" data-key="4">4</button>
+          <button class="keypad-btn" data-key="5">5</button>
+          <button class="keypad-btn" data-key="6">6</button>
+          <button class="keypad-btn" data-key="×">×</button>
+        </div>
+        <div class="keypad-row">
+          <button class="keypad-btn" data-key="1">1</button>
+          <button class="keypad-btn" data-key="2">2</button>
+          <button class="keypad-btn" data-key="3">3</button>
+          <button class="keypad-btn" data-key="-">-</button>
+        </div>
+        <div class="keypad-row">
+          <button class="keypad-btn" data-key="0">0</button>
+          <button class="keypad-btn" data-key=".">.</button>
+          <button class="keypad-btn" data-key="+">+</button>
+          <button class="keypad-btn" data-key="=">=</button>
+        </div>
+        <div class="keypad-row">
+          <button class="keypad-btn wide" data-key="C">C</button>
+          <button class="keypad-btn wide" data-key="⌫">⌫</button>
+        </div>
+      </div>
+
+      <div class="quick-ops">
+        <span class="op-label">Quick insert:</span>
+        <button class="op-btn" data-op="×">×</button>
+        <button class="op-btn" data-op="÷">÷</button>
+        <button class="op-btn" data-op="^">^</button>
+        <button class="op-btn" data-op="(">( )</button>
+      </div>
+
+      <div class="example-problems">
+        <span class="examples-label">Try these:</span>
+        <button class="example-chip" data-eq="3 + 4">3 + 4</button>
+        <button class="example-chip" data-eq="15 - 7">15 − 7</button>
+        <button class="example-chip" data-eq="6 × 8">6 × 8</button>
+        <button class="example-chip" data-eq="48 ÷ 6">48 ÷ 6</button>
+        <button class="example-chip" data-eq="(3 + 4) × 2">(3+4)×2</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="solve-btn">⚡ Solve</button>
+        <button class="btn btn-ghost" id="clear-text-btn">🗑️ Clear</button>
+      </div>
+    </div>
+
+    <!-- ── TAB: SPEAK ─────────────────────────────────────────── -->
+    <div class="tab-content" id="tab-speak">
+      <h2 class="panel-title">🎙️ Speak a Problem</h2>
+      <p class="panel-subtitle">Say a math problem out loud!</p>
+
+      <div class="mic-area">
+        <button class="mic-btn" id="mic-btn" aria-label="Start recording">
+          <span class="mic-icon">🎙️</span>
+          <span class="mic-ripple"></span>
+        </button>
+        <p class="mic-status" id="mic-status">Tap the mic to start speaking</p>
+      </div>
+
+      <div class="transcript-box hidden" id="transcript-box">
+        <span class="transcript-label">I heard:</span>
+        <p id="transcript-text"></p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary hidden" id="solve-speech-btn">⚡ Solve This</button>
+      </div>
+    </div>
+
+  </section><!-- /input-panel -->
+
+  <!-- RIGHT: OUTPUT PANEL -->
+  <section class="panel output-panel">
+
+    <!-- Idle State -->
+    <div class="output-idle" id="output-idle">
+      <div class="idle-animation">
+        <span class="idle-emoji">🌟</span>
+        <span class="idle-emoji delay-1">✨</span>
+        <span class="idle-emoji delay-2">💫</span>
+      </div>
+      <h3 class="idle-title">Ready to learn!</h3>
+      <p class="idle-subtitle">Draw, upload, type, or speak a math problem to get started.</p>
+    </div>
+
+    <!-- Loading State -->
+    <div class="output-loading hidden" id="output-loading">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Thinking... 🤔</p>
+    </div>
+
+    <!-- Result State -->
+    <div class="output-result hidden" id="output-result">
+
+      <!-- Prediction Badge -->
+      <div class="result-badge" id="result-badge">
+        <span class="result-digit" id="result-digit">?</span>
+        <div class="result-meta">
+          <span class="result-confidence" id="result-confidence"></span>
+          <div class="confidence-bar-wrap">
+            <div class="confidence-bar" id="confidence-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equation Result -->
+      <div class="equation-result hidden" id="equation-result">
+        <div class="eq-display">
+          <span class="eq-left" id="eq-left"></span>
+          <span class="eq-equals">=</span>
+          <span class="eq-answer" id="eq-answer"></span>
+        </div>
+      </div>
+
+      <!-- AI Feedback -->
+      <div class="feedback-card" id="feedback-card">
+        <div class="feedback-emoji" id="feedback-emoji">⭐</div>
+        <p class="feedback-message" id="feedback-message">Great work!</p>
+        <p class="feedback-encouragement" id="feedback-encouragement"></p>
+        <div class="feedback-hint hidden" id="feedback-hint-wrap">
+          <span class="hint-label">💡 Hint:</span>
+          <span class="hint-text" id="feedback-hint-text"></span>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="steps-section hidden" id="steps-section">
+        <h4 class="steps-title">🪜 Step-by-step</h4>
+        <ol class="steps-list" id="steps-list"></ol>
+      </div>
+
+      <!-- Prob Distribution -->
+      <div class="probs-section hidden" id="probs-section">
+        <h4 class="probs-title">📊 What I thought it could be:</h4>
+        <div class="probs-bars" id="probs-bars"></div>
+      </div>
+
+    </div><!-- /output-result -->
+
+    <!-- Error State -->
+    <div class="output-error hidden" id="output-error">
+      <div class="error-emoji">😅</div>
+      <p class="error-msg" id="error-msg">Something went wrong. Let's try again!</p>
+    </div>
+
+  </section><!-- /output-panel -->
+
+</main>
+
+<!-- ── PRACTICE SECTION ──────────────────────────────────────────── -->
+<section class="practice-section">
+  <div class="practice-header">
+    <h2 class="section-title">🎯 Daily Practice</h2>
+    <div class="level-indicator">
+      <span id="practice-level-label">Level 1 — Counting Stars ⭐</span>
+      <button class="btn btn-sm btn-outline" id="new-problem-btn">New Problem 🔄</button>
+    </div>
+  </div>
+
+  <div class="practice-card" id="practice-card">
+    <div class="problem-display" id="problem-display">
+      <span class="problem-text" id="problem-text">Loading problem...</span>
+    </div>
+    <div class="problem-hint" id="problem-hint-text"></div>
+
+    <div class="answer-row">
+      <input type="number" id="answer-input" class="answer-input" placeholder="Your answer" />
+      <button class="btn btn-primary" id="check-answer-btn">✅ Check</button>
+    </div>
+
+    <div class="answer-feedback hidden" id="answer-feedback"></div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-section">
+    <div class="progress-stats">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-correct">0</span>
+        <span class="stat-label">Correct ✅</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-streak">0</span>
+        <span class="stat-label">Streak 🔥</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-accuracy">—</span>
+        <span class="stat-label">Accuracy 🎯</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-level">1</span>
+        <span class="stat-label">Level 🏆</span>
+      </div>
+    </div>
+    <div class="xp-bar-wrap">
+      <div class="xp-bar" id="xp-bar" style="width:0%"></div>
+    </div>
+    <p class="xp-label" id="xp-label">0 / 10 XP to next level</p>
+  </div>
+
+</section>
+
+<!-- ── PLAYER NAME MODAL ──────────────────────────────────────────── -->
+<div class="modal-overlay" id="name-modal">
+  <div class="modal-card">
+    <div class="modal-emoji">🦄</div>
+    <h2 class="modal-title">Welcome to MathMagic!</h2>
+    <p class="modal-subtitle">What's your name, brave explorer?</p>
+    <input type="text" id="name-input" class="modal-input" placeholder="Enter your name..." maxlength="20" />
+    <button class="btn btn-primary btn-full" id="start-btn">Let's Go! 🚀</button>
+  </div>
+</div>
+
+<!-- ── ACHIEVEMENT TOAST ─────────────────────────────────────────── -->
+<div class="toast hidden" id="achievement-toast">
+  <span class="toast-emoji" id="toast-emoji">🏆</span>
+  <div class="toast-text">
+    <strong id="toast-title">Level Up!</strong>
+    <span id="toast-msg">You reached Level 2!</span>
+  </div>
+</div>
+
+<script src="static/script.js"></script>
+</body>
+</html>

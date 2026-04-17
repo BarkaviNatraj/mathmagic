@@ -1,0 +1,34 @@
+# ─── Core ──────────────────────────────────────────────────────────────────
+flask==3.0.0
+flask-cors==4.0.0
+gunicorn==21.2.0
+
+# ─── ML / Deep Learning ──────────────────────────────────────────────────────
+tensorflow==2.15.0          # CPU build; use tensorflow-gpu for GPU servers
+numpy==1.26.3
+scikit-learn==1.4.0
+opencv-python-headless==4.9.0.80
+Pillow==10.2.0
+
+# ─── NLP / OCR ───────────────────────────────────────────────────────────────
+pytesseract==0.3.10
+# System dep: sudo apt install tesseract-ocr
+
+# ─── PDF Handling ─────────────────────────────────────────────────────────────
+PyMuPDF==1.23.8             # fitz — fast PDF to image conversion
+pdfplumber==0.10.3          # PDF text extraction
+
+# ─── Speech Recognition ───────────────────────────────────────────────────────
+transformers==4.37.0        # Wav2Vec2
+torch==2.1.2                # PyTorch (CPU); use torch+cu121 for GPU
+torchaudio==2.1.2
+soundfile==0.12.1
+
+# ─── Utilities ────────────────────────────────────────────────────────────────
+python-dotenv==1.0.0
+requests==2.31.0
+scipy==1.12.0
+
+# ─── Dev / Testing ───────────────────────────────────────────────────────────
+pytest==7.4.4
+pytest-flask==1.3.0
